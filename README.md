@@ -1,132 +1,143 @@
-# Vet App REST API
+# Vet API
 
 This project is being developed live on Twitch.
 
-You can watch the stream here: https://www.twitch.tv/joaofmaranhao
+Saas API for a veterinary clinic.
+When a user creates an account, they also create a Clinic.
+Clinics can have multiple users, which can be admins or regular users.
+Regular users can create, read, update, and delete appointments, clients,pets, and veterinarians.
+Admins can do the same, plus they can create other users and change Clinic settings.
 
-## Overview
+## User Stories
 
-REST API for a veterinary clinic.
+- As a user, I want to be able to register a new account
+- As a user, I want to be able to login
+- As a user, I want to be able to logout
+- As a user, I want to be able to create a clinic
+- As a admin user, I want to be able to create other users and assign them to the clinic with a role
+- As a admin user, I want to be able to create, read, update, and delete users, appointments, clients, pets, and veterinarians
+- As a user, I want to be able to create, read, update, and delete appointments, clients, pets, and veterinarians
+- As a user, I want to be able to change my password
 
-It allows users to create, read, update, and delete appointments, clients, and pets.
+## Business Rules
 
-Users can only access resources that they have permission to access.
-
-Roles are assigned to users, and permissions are assigned to roles.
-
-## Requirements
-
-- Should exists two roles: `admin` and `user`
-- `admin`should be able to create users with any role
-- `admin` should be able to create, read, update, and delete appointments, clients, and pets
-- `user` should be able to create, read, update, and delete appointments, clients, and pets
+- A user can only access their own data
+- A admin user can access all data for their clinic
+- A user can only access data for their clinic
+- Users created by a admin user are automatically assigned to the clinic of the admin user
+- Users created by a admin user receive an email with a link to set their password
 
 ## Models
 
+### User
 
-| Field Name | Data Type | Validation |
-|------------|-----------|------------|
-| id         | Integer   | read-only  |
-| email      | String    | required, unique |
-| password   | String    | required   |
-| role       | String    | required   |
+- id
+- email
+- password
+- clinic_id
+- role
 
-### Client
+### Clinic
 
-| Field Name | Data Type | Validation |
-|------------|-----------|------------|
-| id         | Integer   | read-only  |
-| name       | String    | required, unique |
-| address    | String    | required   |
-| phone      | String    | required   |
-
-### Pet
-
-| Field Name | Data Type | Validation |
-|------------|-----------|------------|
-| id         | Integer   | read-only  |
-| name       | String    | required, unique |
-| species    | String    | required   |
-| breed      | String    | required   |
-| age        | Integer   | required   |
-| client_id  | Integer   | required   |
+- id
+- name
+- address
+- phone
+- email
 
 ### Appointment
 
-| Field Name | Data Type | Validation |
-|------------|-----------|------------|
-| id         | Integer   | read-only  |
-| date       | Date      | required   |
-| time       | Time      | required   |
-| client_id  | Integer   | required   |
-| pet_id     | Integer   | required   |
+- id
+- client_id
+- pet_id
+- veterinarian_id
+- date
+- time
+- notes
+
+### Client
+
+- id
+- clinic_id
+- first_name
+- last_name
+- address
+- phone
+- email
+
+### Pet
+
+- id
+- client_id
+- name
+- type
+- breed
+- age
+- weight
+- notes
+
+### Veterinarian
+
+- id
+- clinic_id
+- first_name
+- last_name
+- address
+- phone
+- email
 
 ## Endpoints
 
-### Authentication
-
-`POST /auth/signup`
-
-| Field Name | Data Type | Validation |
-|------------|-----------|------------|
-| email      | String    | required, unique |
-| password   | String    | required   |
-| role       | String    | required   |
-
-`POST /auth/login`
-
-| Field Name | Data Type | Validation |
-|------------|-----------|------------|
-| username   | String    | required   |
-| password   | String    | required   |
-
 ### Users
 
-`GET /users`
+- POST /users
+- GET /users
+- GET /users/:id
+- PUT /users/:id
+- DELETE /users/:id
 
-`GET /users/:id`
+### Clinics
 
-`POST /users`
-
-`PUT /users/:id`
-
-`DELETE /users/:id`
-
-### Clients
-
-`GET /clients`
-
-`GET /clients/:id`
-
-`POST /clients`
-
-`PUT /clients/:id`
-
-`DELETE /clients/:id`
-
-### Pets
-
-`GET /pets`
-
-`GET /pets/:id`
-
-`POST /pets`
-
-`PUT /pets/:id`
-
-`DELETE /pets/:id`
+- POST /clinics
+- GET /clinics
+- GET /clinics/:id
+- PUT /clinics/:id
+- DELETE /clinics/:id
 
 ### Appointments
 
-`GET /appointments`
+- POST /appointments
+- GET /appointments
+- GET /appointments/:id
+- PUT /appointments/:id
+- DELETE /appointments/:id
 
-`GET /appointments/:id`
+### Clients
 
-`POST /appointments`
+- POST /clients
+- GET /clients
+- GET /clients/:id
+- PUT /clients/:id
+- DELETE /clients/:id
 
-`PUT /appointments/:id`
+### Pets
 
-`DELETE /appointments/:id`
+- POST /pets
+- GET /pets
+- GET /pets/:id
+- PUT /pets/:id
+- DELETE /pets/:id
 
+### Veterinarians
 
----
+- POST /veterinarians
+- GET /veterinarians
+- GET /veterinarians/:id
+- PUT /veterinarians/:id
+- DELETE /veterinarians/:id
+
+## Resources
+
+- [NestJS](https://nestjs.com/)
+- [PostgreSQL](https://www.postgresql.org/)
+
