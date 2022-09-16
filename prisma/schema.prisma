@@ -9,3 +9,77 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id        Int     @id @default(autoincrement())
+  email     String  @unique
+  password  String
+  clinic_id Int?
+  role      String
+  Clinic    Clinic? @relation(fields: [clinicId], references: [id])
+  clinicId  Int?
+}
+
+model Clinic {
+  id           Int            @id @default(autoincrement())
+  name         String         @unique
+  address      String
+  phone        String
+  email        String
+  users        User[]
+  Appointment  Appointment[]
+  Veterinarian Veterinarian[]
+  Client       Client[]
+}
+
+model Pet {
+  id           Int           @id @default(autoincrement())
+  name         String
+  age          Int
+  breed        String
+  notes        String
+  appointments Appointment[]
+  client_id    Int
+  client       Client        @relation(fields: [client_id], references: [id])
+}
+
+model Client {
+  id           Int           @id @default(autoincrement())
+  name         String
+  phone        String
+  address      String
+  email        String
+  pets         Pet[]
+  appointments Appointment[]
+  clinic_id    Int
+  clinic       Clinic        @relation(fields: [clinic_id], references: [id])
+}
+
+model Veterinarian {
+  id           Int           @id @default(autoincrement())
+  name         String
+  phone        String
+  address      String
+  email        String
+  appointments Appointment[]
+  clinic_id    Int
+  clinic       Clinic        @relation(fields: [clinic_id], references: [id])
+}
+
+model Appointment {
+  id              Int           @id @default(autoincrement())
+  date            DateTime
+  status          String
+  note            String
+  client_id       Int
+  pet_id          Int
+  veterinarian_id Int
+  clinic_id       Int
+  clinic          Clinic        @relation(fields: [clinic_id], references: [id])
+  Veterinarian    Veterinarian? @relation(fields: [veterinarianId], references: [id])
+  veterinarianId  Int?
+  Pet             Pet?          @relation(fields: [petId], references: [id])
+  petId           Int?
+  Client          Client?       @relation(fields: [clientId], references: [id])
+  clientId        Int?
+}
