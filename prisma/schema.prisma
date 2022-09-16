@@ -16,8 +16,7 @@ model User {
   password  String
   clinic_id Int?
   role      String
-  Clinic    Clinic? @relation(fields: [clinicId], references: [id])
-  clinicId  Int?
+  Clinic    Clinic? @relation(fields: [clinic_id], references: [id])
 
   @@map("users")
 }
